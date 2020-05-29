@@ -1,0 +1,4 @@
+storePassword=computerGraphics
+keyPassword=computerGraphics
+keyAlias=key
+storeFile=/home/santosh/key.jks

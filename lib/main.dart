@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:maxWorkshop/widgets/chart.dart';
+import 'package:maxWorkshop/widgets/pdf_widget.dart';
 import './models/transaction.dart';
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
+import 'const/const.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Personal Expenses',
       theme: ThemeData(
+        pageTransitionsTheme: pageTransitionsTheme,
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
         fontFamily: 'Quicksand',
@@ -48,42 +51,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
-    Transaction(
-      id: 't1',
-      title: 'New Shoes',
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Weekly Groceries',
-      amount: 16.53,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't1',
-      title: 'New Shoes',
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Weekly Groceries',
-      amount: 16.53,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't1',
-      title: 'New Shoes',
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Weekly Groceries',
-      amount: 16.53,
-      date: DateTime.now(),
-    ),
     Transaction(
       id: 't1',
       title: 'New Shoes',
@@ -169,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       appBar.preferredSize.height -
                       MediaQuery.of(context).padding.top -
                       MediaQuery.of(context).padding.bottom) *
-                  0.3,
+                  0.27,
               child: Chart(
                 recentTransactions: _recentTransactions,
               ),
@@ -179,16 +146,41 @@ class _MyHomePageState extends State<MyHomePage> {
                       appBar.preferredSize.height -
                       MediaQuery.of(context).padding.top -
                       MediaQuery.of(context).padding.bottom) *
-                  0.7,
+                  0.6,
               child: TransactionList(
                 removeTransaction: _removeTransaction,
                 transactions: _userTransactions,
               ),
             ),
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top -
+                      MediaQuery.of(context).padding.bottom) *
+                  0.13,
+              child: RaisedButton(
+                padding: EdgeInsets.all(10),
+                color: Colors.red,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return PdfData();
+                    }),
+                  );
+                },
+                child: Text(
+                  "PDF",
+                  style: TextStyle(
+                    fontSize: 33,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _startAddNewTransaction(context),
