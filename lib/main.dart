@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:maxWorkshop/widgets/chart.dart';
-import 'package:maxWorkshop/widgets/pdf_widget.dart';
+// import 'package:maxWorkshop/widgets/pdf_widget.dart';
 import './models/transaction.dart';
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
 import 'const/const.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // lock orientation
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -136,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       appBar.preferredSize.height -
                       MediaQuery.of(context).padding.top -
                       MediaQuery.of(context).padding.bottom) *
-                  0.27,
+                  0.35,
               child: Chart(
                 recentTransactions: _recentTransactions,
               ),
@@ -146,35 +155,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       appBar.preferredSize.height -
                       MediaQuery.of(context).padding.top -
                       MediaQuery.of(context).padding.bottom) *
-                  0.6,
+                  0.65,
               child: TransactionList(
                 removeTransaction: _removeTransaction,
                 transactions: _userTransactions,
-              ),
-            ),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top -
-                      MediaQuery.of(context).padding.bottom) *
-                  0.13,
-              child: RaisedButton(
-                padding: EdgeInsets.all(10),
-                color: Colors.red,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return PdfData();
-                    }),
-                  );
-                },
-                child: Text(
-                  "PDF",
-                  style: TextStyle(
-                    fontSize: 33,
-                  ),
-                ),
               ),
             ),
           ],
