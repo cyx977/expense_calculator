@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 
 import 'package:maxWorkshop/widgets/chart.dart';
 // import 'package:maxWorkshop/widgets/pdf_widget.dart';
@@ -74,6 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
+  bool _switchState = false;
+
   void _addNewTransaction(
       String txTitle, double txAmount, DateTime transactionDate) {
     final newTx = Transaction(
@@ -133,6 +135,21 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
+    final _isLandScape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    final txList = Container(
+      height: (MediaQuery.of(context).size.height -
+              appBar.preferredSize.height -
+              MediaQuery.of(context).padding.top -
+              MediaQuery.of(context).padding.bottom) *
+          0.65,
+      child: TransactionList(
+        removeTransaction: _removeTransaction,
+        transactions: _userTransactions,
+      ),
+    );
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -140,27 +157,46 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top -
-                      MediaQuery.of(context).padding.bottom) *
-                  0.35,
-              child: Chart(
-                recentTransactions: _recentTransactions,
+            if (_isLandScape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Show Chart"),
+                  Switch(
+                    value: _switchState,
+                    onChanged: (val) {
+                      setState(() {
+                        _switchState = val;
+                      });
+                    },
+                  ),
+                ],
               ),
-            ),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top -
-                      MediaQuery.of(context).padding.bottom) *
-                  0.65,
-              child: TransactionList(
-                removeTransaction: _removeTransaction,
-                transactions: _userTransactions,
+            if (_isLandScape)
+              _switchState
+                  ? Container(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top -
+                              MediaQuery.of(context).padding.bottom) *
+                          0.70,
+                      child: Chart(
+                        recentTransactions: _recentTransactions,
+                      ),
+                    )
+                  : txList,
+            if (!_isLandScape)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top -
+                        MediaQuery.of(context).padding.bottom) *
+                    0.30,
+                child: Chart(
+                  recentTransactions: _recentTransactions,
+                ),
               ),
-            ),
+            if (!_isLandScape) txList,
           ],
         ),
       ),
