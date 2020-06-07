@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 
@@ -58,7 +61,24 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state){
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
   final List<Transaction> _userTransactions = [
     Transaction(
       id: 't1',
@@ -166,7 +186,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Show Chart"),
-                  Switch(
+                  //.adaptive different look on ios vs android CupertinoSwitch vs material switch
+                  Switch.adaptive(
                     value: _switchState,
                     onChanged: (val) {
                       setState(() {
@@ -205,10 +226,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
+      //checking platform
+      floatingActionButton: Platform.isAndroid ? FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _startAddNewTransaction(context),
-      ),
+      ) : Container(),
     );
   }
 }
