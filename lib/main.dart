@@ -72,6 +72,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state){
     print(state);
+    if(state == AppLifecycleState.resumed){
+      print("Back in Action");
+    }
   }
 
   @override
